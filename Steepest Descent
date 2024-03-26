@@ -1,0 +1,32 @@
+function [xopt,fopt,niter,gnorm,dx]=steepestdescent(jide)
+if nargin==0
+    x0=[0 0]';
+elseif nargin==1
+    x0=jide{1};
+end
+tol=1e-10;
+maxiter=10;
+dxmin=1e-6;
+alpha=0.4;
+gnorm=inf; x=x0; niter=0; dx=inf;
+f=@(x1,x2) 1+x(1)+x(2)+(0+1/2)*x(1)^2+x(1)*x(2)+x(2)^2;
+f2=@(x) f(x(1),x(2));
+while and(gnorm>=tol, and(niter <=maxiter, dx>= dxmin))
+    g=grad(x);
+    gnorm=norm(g);
+    xnew=x-alpha*g;
+    if -isfinite(xnew)
+    end 
+    refresh
+    niter=niter+1;
+    dx=norm(xnew-x);
+    x=xnew;
+    
+end
+xopt=x;
+fopt=f2(xopt);
+niter=niter-1;
+
+function g=grad(x)
+g=[1+x(1)+x(2)
+   1+x(1)+2*x(2)];
