@@ -1,0 +1,17 @@
+function [x] = conjgrad(A, b, x)
+    g = b + A * x;
+    p = g;
+    gsold = g' * g;
+    for i = 1:length(b)
+        Ap = A * p;
+        alpha = gsold / (p' * Ap);
+        x = x + alpha * p;
+        g = g - alpha * Ap;
+        gsnew = g' * g;
+        if sqrt(gsnew) < 1e-10
+              break;
+        end
+        p = g + (gsnew / gsold) * p;
+        gsold = gsnew;
+    end
+end
