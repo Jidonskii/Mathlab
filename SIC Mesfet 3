@@ -1,0 +1,24 @@
+% All parameters are expressed in meters
+a = [1.6e-7,1e-7,4e-7];  %Device thickness
+e = 8.85e-12;       %Permittivity
+q = 1.60218e-19;    %Electronic charge
+ND = [1.1e23,2e23,3e22]; %Doping density/concentration
+VL = 0.151;         %Voltage drop across the gate region
+VG = 0;             %Gate voltage
+K = 1.38066e-23;
+T = 300;
+NA = 5e21;          %Substrate concentration
+NC = 3.25e14 * sqrt(T^3);   %Electron effective state density
+NV = 4.8e15 * sqrt(T^3);
+Eg = 3.26;          %Band-gap EV
+NI = sqrt(NC*NV) * exp(-(Eg*q)/(2*K*T));    %Intrinsic concentration
+VBi = (K*T)/q * log((ND*NA)/(NI^2));        %Built-in voltage
+u = sqrt(e./(q .* ND) .* (VL + VG + VBi))./a; %Normalized depletion layer thickness
+W = [5e-4,2e-4,1e-6];    %Gate width
+vs = 8e4;           %Saturation velocity
+Imsat = q .* ND .* W .* a .* vs .* (1 - u);  %Saturation channel current
+VGv = [0,-1,-2];    %Gate voltage
+plot(VGv,Imsat, 'r-o')
+axis([-3,0,0.0001,0.1])
+xlabel('GATE VOLTAGE (V)')
+ylabel('CHANNEL CURRENT (A)')
